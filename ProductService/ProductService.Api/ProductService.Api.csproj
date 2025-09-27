@@ -18,4 +18,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProductService.Logic\ProductService.Logic.csproj" />
+  </ItemGroup>
+
 </Project>
