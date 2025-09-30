@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  core-base:
+    container_name: core-base  
+    build:
+      context: ..
+      dockerfile: Core/Dockerfile
+    image: core-base
+
