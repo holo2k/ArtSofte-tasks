@@ -1,0 +1,97 @@
+{
+  "rabbit_version": "3.13",
+  "vhosts": [
+    { "name": "/" }
+  ],
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "9/1i+jKFRpbTRV1PtRnzFFYibT3cEpP92JeZ8YKGtflf4e/u",
+      "tags": [ "administrator" ]
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "product.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "search.indexer",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "realtime.broadcast",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "notification.sender",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "monitoring.audit",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "product.events",
+      "vhost": "/",
+      "destination": "search.indexer",
+      "destination_type": "queue",
+      "routing_key": "product.*",
+      "arguments": {}
+    },
+    {
+      "source": "product.events",
+      "vhost": "/",
+      "destination": "realtime.broadcast",
+      "destination_type": "queue",
+      "routing_key": "review.*",
+      "arguments": {}
+    },
+    {
+      "source": "product.events",
+      "vhost": "/",
+      "destination": "notification.sender",
+      "destination_type": "queue",
+      "routing_key": "review.replied",
+      "arguments": {}
+    },
+    {
+      "source": "product.events",
+      "vhost": "/",
+      "destination": "monitoring.audit",
+      "destination_type": "queue",
+      "routing_key": "#",
+      "arguments": {}
+    }
+  ]
+}
