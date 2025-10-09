@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
@@ -80,16 +81,16 @@ public class RabbitMqPublisher : IEventPublisher, IAsyncDisposable
         if (!props.Headers.ContainsKey("X-Causation-Id"))
             props.Headers["X-Causation-Id"] = Guid.NewGuid().ToString();
 
-        var body = Encoding.UTF8.GetBytes(Convert.ToString(payload) ?? string.Empty);
-
+        var json = JsonSerializer.Serialize(payload);
+        var body = Encoding.UTF8.GetBytes(json);
 
         await _channel.BasicPublishAsync(_exchangeName,
             routingKey,
             false,
             props,
             body, cancellationToken);
-        _logger.LogInformation(
-            "Published message to {Exchange} / {RoutingKey} Size={Size} Correlation={Correlation}",
+
+        _logger.LogInformation("Published message to {Exchange} / {RoutingKey} Size={Size} Correlation={Correlation}",
             _exchangeName, routingKey, body.Length, props.Headers["X-Correlation-Id"]);
     }
 

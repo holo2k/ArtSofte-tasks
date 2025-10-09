@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  orderservice-api:
+    build:
+      context: ..
+      dockerfile: OrderService/OrderService.API/Dockerfile
+    container_name: orderservice-api
+    ports:
+      - "5001:80"
+    depends_on:
+      - orderservice-db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__Default=Host=orderservice-db;Port=5432;Database=orderdb;Username=postgres;Password=postgres
+
+  orderservice-db:
+    image: postgres:16
+    container_name: orderservice-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=orderdb
+    ports:
+      - "5434:5432"
+    volumes:
+      - orderservice_data:/var/lib/postgresql/data
+
+volumes:
+  orderservice_data:

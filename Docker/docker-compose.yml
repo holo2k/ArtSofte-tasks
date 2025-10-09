@@ -1,5 +1,6 @@
 include:
     - docker-compose.product-service.yml
+    - docker-compose.order-service.yml
 
 services:
     rabbit-mq:
