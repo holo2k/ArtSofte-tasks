@@ -89,6 +89,7 @@ public class ProductRepository : IProductRepository
         existing.Quantity = updated.Quantity;
         existing.Category = updated.Category;
         existing.UpdatedAt = DateTime.UtcNow;
+        existing.IsActive = updated.IsActive;
 
         if (media != null)
         {

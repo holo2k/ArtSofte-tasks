@@ -97,6 +97,7 @@ public class ProductService : IProductService
         var updated = _mapper.Map<Product>(request);
         updated.Id = id;
         updated.UpdatedAt = DateTime.UtcNow;
+        updated.IsActive = request.IsActive;
         updated.SellerId = Guid.CreateVersion7(); // TODO AUTH
 
         updated.Media = request.Media?.Select(m =>

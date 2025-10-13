@@ -10,6 +10,7 @@ services:
       - "5001:80"
     depends_on:
       - orderservice-db
+      - rabbit-mq
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80

@@ -1,4 +1,5 @@
-﻿using OrderService.Application.Dtos;
+﻿using OrderService.Application.Clients;
+using OrderService.Application.Dtos;
 using OrderService.Application.Services.Abstractions;
 using OrderService.Domain.Enums;
 using OrderService.Domain.Models;
@@ -8,29 +9,29 @@ namespace OrderService.Application.Services.Implementations;
 
 public class OrderService : IOrderService
 {
+    private readonly IProductClient _productClient;
     private readonly IProductRepository _productRepo;
     private readonly IOrderRepository _repo;
 
-    public OrderService(IOrderRepository repo, IProductRepository productRepo)
+    public OrderService(IOrderRepository repo, IProductRepository productRepo, IProductClient productClient)
     {
         _repo = repo;
         _productRepo = productRepo;
+        _productClient = productClient;
     }
 
     public async Task<Guid> CreateOrder(Guid buyerId, Guid sellerId,
         List<(Guid productId, int qty, decimal price)> items)
     {
-        if (items == null || items.Count == 0) throw new ArgumentException("items");
+        if (items == null || items.Count == 0) throw new ArgumentException(nameof(items));
 
         var orderItems = new List<OrderItem>();
         foreach (var i in items)
         {
-            var snap = await _productRepo.GetByIdAsync(i.productId);
-            if (snap == null || !snap.IsActive)
-                throw new InvalidOperationException($"Product {i.productId} is not available");
-
-            var unitPrice = snap.Price;
-            orderItems.Add(new OrderItem(i.productId, i.qty, unitPrice));
+            var prod = await _productClient.GetProductByIdAsync(i.productId);
+            if (prod == null)
+                throw new InvalidOperationException($"Product {i.productId} not available");
+            orderItems.Add(new OrderItem(i.productId, i.qty, prod.Price));
         }
 
         var order = new Order(buyerId, sellerId, orderItems);
@@ -106,5 +107,27 @@ public class OrderService : IOrderService
 
         order.ReplaceItems(newItems);
         await _repo.UpdateAsync(order);
+    }
+
+    [Obsolete]
+    public async Task<Guid> CreateOrderObsolete(Guid buyerId, Guid sellerId,
+        List<(Guid productId, int qty, decimal price)> items)
+    {
+        if (items == null || items.Count == 0) throw new ArgumentException("items");
+
+        var orderItems = new List<OrderItem>();
+        foreach (var i in items)
+        {
+            var snap = await _productRepo.GetByIdAsync(i.productId);
+            if (snap == null || !snap.IsActive)
+                throw new InvalidOperationException($"Product {i.productId} is not available");
+
+            var unitPrice = snap.Price;
+            orderItems.Add(new OrderItem(i.productId, i.qty, unitPrice));
+        }
+
+        var order = new Order(buyerId, sellerId, orderItems);
+        await _repo.AddAsync(order);
+        return order.Id;
     }
 }
