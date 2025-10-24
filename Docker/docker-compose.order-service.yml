@@ -28,6 +28,12 @@ services:
       - "5434:5432"
     volumes:
       - orderservice_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d productdb"]
+      interval: 10s    
+      timeout: 5s      
+      retries: 5       
+      start_period: 10s
 
 volumes:
   orderservice_data:
