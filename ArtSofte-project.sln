@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Domain", "Orde
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Infrastructure", "OrderService\OrderService.Infrastructure\OrderService.Infrastructure.csproj", "{2824AE43-B55F-ECEF-88B0-8445AACA7B94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemaphoreTest", "SemaphoreTest\SemaphoreTest.csproj", "{6E6A04DF-1346-4FD4-A64D-DD149E33E55D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{2824AE43-B55F-ECEF-88B0-8445AACA7B94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2824AE43-B55F-ECEF-88B0-8445AACA7B94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2824AE43-B55F-ECEF-88B0-8445AACA7B94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E6A04DF-1346-4FD4-A64D-DD149E33E55D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E6A04DF-1346-4FD4-A64D-DD149E33E55D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E6A04DF-1346-4FD4-A64D-DD149E33E55D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E6A04DF-1346-4FD4-A64D-DD149E33E55D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,7 +81,7 @@ Global
 		{2824AE43-B55F-ECEF-88B0-8445AACA7B94} = {2F10B628-3ECE-4617-A053-56464A65BB77}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		FileExplorer = |Docker\
 		SolutionGuid = {D832F37E-1E2E-44DC-B7D5-EDBFE5104525}
+		FileExplorer = |Docker\
 	EndGlobalSection
 EndGlobal

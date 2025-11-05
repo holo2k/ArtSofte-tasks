@@ -1,4 +1,5 @@
 using System.Reflection;
+using Core.DistributedSemaphore;
 using Core.EventBus;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,9 @@ builder.Services.AddDbContext<SagaDbContext>(options =>
 {
     options.UseNpgsql(conn, npg => npg.MigrationsAssembly("OrderService.Infrastructure"));
 });
+
+builder.Services.AddRedisDistributedSemaphore(builder.Configuration.GetValue<string>("Redis:Configuration") ??
+                                              "localhost:6379");
 
 var rabbitSection = builder.Configuration.GetSection("RabbitMq");
 var rabbitUri = rabbitSection.GetValue<string>("Uri");
@@ -103,6 +107,10 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddSingleton<IEventSubscriber, RabbitMqSubscriber>();
 builder.Services.AddInfrastructure(conn!);
 builder.Services.AddApplication();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
 var app = builder.Build();
 

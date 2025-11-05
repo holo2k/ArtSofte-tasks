@@ -1,21 +1,37 @@
 include:
-    - docker-compose.product-service.yml
-    - docker-compose.order-service.yml
+  - docker-compose.product-service.yml
+  - docker-compose.order-service.yml
 
 services:
-    rabbit-mq:
-        image: rabbitmq:3.13-management
-        container_name: rabbit-mq
-        ports:
-          - "5672:5672"   # AMQP
-          - "15672:15672" # UI
-        volumes:
-          - rabbitmq-data:/var/lib/rabbitmq
-          - ./rabbitmq_definitions.json:/etc/rabbitmq/definitions.json
-          - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-        environment:
-          - RABBITMQ_DEFAULT_USER=guest
-          - RABBITMQ_DEFAULT_PASS=guest
-          - RABBITMQ_MANAGEMENT_LOAD_DEFINITIONS=/etc/rabbitmq/definitions.json
+  rabbit-mq:
+    image: rabbitmq:3.13-management
+    container_name: rabbit-mq
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # UI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - ./rabbitmq_definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_MANAGEMENT_LOAD_DEFINITIONS=/etc/rabbitmq/definitions.json
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
 volumes:
   rabbitmq-data:
+  redis-data:
